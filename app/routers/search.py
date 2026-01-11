@@ -1,13 +1,12 @@
 from fastapi import APIRouter, Depends, status, HTTPException
 from sqlalchemy.orm import Session
 from typing import List, Optional
-
-from database import get_db
-import models, schemas, oauth2
 from sqlalchemy import or_
 
-router = APIRouter(prefix="/search", tags=["Search"])
+from app.database import get_db
+from app import models, schemas, oauth2
 
+router = APIRouter(prefix="/search", tags=["Search"])
 
 @router.get("/images", response_model=List[schemas.imageOut])
 def search_images(
