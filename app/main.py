@@ -1,9 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routers import user, auth, image, search
-from database import engine, Base
-import models
 from contextlib import asynccontextmanager
+from app.routers import user, auth, image, search
+from app.database import engine, Base
+from app import models
 
 @asynccontextmanager
 async def lifespan(app):
