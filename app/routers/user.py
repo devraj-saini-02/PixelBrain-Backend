@@ -80,6 +80,13 @@ def get_user_images(id: int, limit: int = 100, skip: int = 0, db: Session = Depe
     result = get_images_for_user(id, db, requester_id=current_user.id, limit=limit, skip=skip)
     return result["images"]
 
+@router.get("/me", response_model=schemas.UserOut)
+def get_current_user(
+    current_user: models.User = Depends(oauth2.get_current_user)
+):
+    return current_user
+
+
 
 
 
