@@ -23,6 +23,11 @@ def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     db.refresh(new_user)
     return new_user
 
+@router.get("/me", response_model=schemas.UserOut)
+def get_current_user(current_user: models.User = Depends(oauth2.get_current_user)):
+    return current_user
+
+
 @router.get('/{id}', response_model=schemas.UserOut)
 def get_user(id: int, db: Session = Depends(get_db), ):
     user = db.query(models.User).filter(models.User.id == id).first()
@@ -80,11 +85,6 @@ def get_user_images(id: int, limit: int = 100, skip: int = 0, db: Session = Depe
     result = get_images_for_user(id, db, requester_id=current_user.id, limit=limit, skip=skip)
     return result["images"]
 
-@router.get("/me", response_model=schemas.UserOut)
-def get_current_user(
-    current_user: models.User = Depends(oauth2.get_current_user)
-):
-    return current_user
 
 
 
