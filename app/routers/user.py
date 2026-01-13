@@ -18,10 +18,22 @@ def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     user.password = hashed_password
 
     new_user = models.User(**user.dict())
-    db.add(new_user)
-    db.commit()
-    db.refresh(new_user)
-    return new_user
+
+    try:
+        db.add(new_user)
+        db.commit()
+        db.refresh(new_user)
+        return new_user
+    except IntegrityError:
+        db.rollback()
+        existing_user = db.query(models.User).filter(models.User.email == user.email).first()
+        if existing_user:
+            return existing_user
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Email already registered"
+        )
+
 
 @router.get("/me", response_model=schemas.UserOut)
 @router.get("/me/", response_model=schemas.UserOut)
