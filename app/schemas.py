@@ -13,7 +13,6 @@ class UserOut(BaseModel):
     username: str
     age: int 
     email: EmailStr
-    private: bool
     created_at: datetime
     model_config = ConfigDict(from_attributes=True)
 
@@ -21,6 +20,7 @@ class imageOut(BaseModel):
     id: int
     image_url: str
     public_id: str
+    private: bool
     created_at: datetime
     model_config = ConfigDict(from_attributes=True)
 
